@@ -51,7 +51,7 @@ Success is `201`: `{ id, publicKey, xHandle, xLookupsLeft }`. `xHandle` is the t
 
 Common errors (match on `code`): `invalid_challenge` (get a new challenge), `tweet_not_found`, `tweet_rejected`, `tweet_used`, `already_registered`, `account_taken` (one wallet per X account), `x_lookup_limit`, `x_unavailable` (the attempt still counts), `x_paused`.
 
-To restore a lapsed blue check: `POST /api/verify-x` with `{ action: "verify-x", nonce, server, publicKey, timestamp, tweetUrl }` from the **same** X account. No challenge is needed. A check stays current for payouts for 30 days; a lapsed check does not stop play, but holds payouts (`lapsed_check`).
+While payouts need a blue check (not since 25 November 2026), to restore a lapsed one: `POST /api/verify-x` with `{ action: "verify-x", nonce, server, publicKey, timestamp, tweetUrl }` from the **same** X account. No challenge is needed. A check stays current for payouts for 30 days; a lapsed check does not stop play, but holds payouts (`lapsed_check`).
 
 ## Sign a request
 

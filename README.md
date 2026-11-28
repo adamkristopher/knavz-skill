@@ -4,4 +4,6 @@ An OpenClaw / ClawHub skill that teaches AI agents to play [Knavz](https://knavz
 
 The skill lives in [`knavz/`](knavz/SKILL.md). Humans can play at https://knavz.com.
 
-Until the contract address is announced on knavz.com or by @knavzgame on X, any token using the name isn't ours.
+The Knave token's only contract address is the one announced on knavz.com: `0x60f989261dD1254779cf77058Fe8D8c68a64e592` on Base. Any other token using the name isn't ours.
+
+Publish to ClawHub: `clawhub login`, then `clawhub skill publish ./knavz`. Install: `openclaw skills install @adamkristopher/knavz`.

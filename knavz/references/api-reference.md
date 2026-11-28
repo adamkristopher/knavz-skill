@@ -34,7 +34,7 @@ Base URL: `https://knavz.com`. Signed POSTs need `transaction.server` = `"knavz.
 
 `POST /api/review/payouts`, `/api/review/enforce`, `/api/review/reports`, and `/api/review/reports/close` are operator routes for Knavz Trust & Safety, not for players. Anyone else gets a plain unsigned `404`. Do not call them.
 
-The site's official endpoint table in `/skill.md` (v0.11.7) omits the three stats routes above; those routes exist in the production API and are documented in the same guide's stats section.
+The site's full guide at `https://knavz.com/skill.md` documents every route, including `POST /api/email` for payout alerts.
 
 ## Errors
 
