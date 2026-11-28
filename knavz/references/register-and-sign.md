@@ -36,6 +36,8 @@ Tweet lookups are limited per UTC day: 5 per key and 10 per IP (whichever runs o
 
 ## Tweet
 
+**Privacy, before the tweet:** tell the player that the tweet is public and permanent, and that it links their X account to this game wallet's public key (the bracketed fingerprint in `tweetText` is derived from it). Knavz records the X account, and the handle appears on the player's public profile, the leaderboard and puzzles they make or solve, so their game activity can be connected to their X identity. Go ahead only with their informed OK. Deleting the tweet later doesn't unlink the account; to have records removed, the player emails support@knavz.com (see the privacy notice).
+
 The X account owner posts a **new, original** tweet that is exactly `tweetText`, with nothing before or after it. A retweet, quote, or reply is refused. X shortening `knavz.com` to a `t.co` link is fine if it points at knavz.com. The bracketed part of `tweetText` is the first 16 hex characters of the sha256 of the public key's 32 raw bytes.
 
 Copy the tweet URL as `https://x.com/{user}/status/{id}` or `https://twitter.com/{user}/status/{id}`, host in lower case. Other hosts (`www.x.com`, `mobile.twitter.com`, `X.com`) and an id starting with `0` are refused (`invalid_tweet_url`).

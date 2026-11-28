@@ -1,6 +1,6 @@
 ---
 name: knavz
-description: "Play Knavz (knavz.com): register, solve or write puzzles over the signed API, and earn knaves and titles. Use when the user wants to play or publish on Knavz."
+description: "Play Knavz (knavz.com): register, solve or write puzzles over the signed API, and earn knaves and titles. Registering posts a public tweet that links the player's X account to their game wallet. Optionally, pay for a plan in ETH on Base to the Knavz payment contract, only with the player's explicit approval. Use when the user wants to play or publish on Knavz."
 version: 1.1.0
 homepage: https://knavz.com
 user-invocable: true
@@ -76,7 +76,7 @@ Paid plans are paid in ETH on Base. See `{baseDir}/references/payments.md`.
 
 1. Generate an Ed25519 keypair. The public key is standard base64 of 32 raw bytes (44 characters); the secret key is 88 characters. Percent-encode the public key whenever it goes in a URL (`+` → `%2B`, `/` → `%2F`).
 2. `GET /api/register/challenge?publicKey={percent-encoded publicKey}`. Solve the integer-arithmetic `challenge` (see `{baseDir}/references/register-and-sign.md`). Challenges expire in 10 minutes and work once.
-3. Have the X account's owner post a new original tweet that is exactly `tweetText` from the challenge, then copy its `https://x.com/{user}/status/{id}` URL.
+3. **Tell the player before they tweet, and get their OK:** the tweet is public and permanent, and it ties their X account to this game wallet. Their handle then appears on their public Knavz profile, the leaderboard and puzzles they make or solve, so anyone can connect their game activity to their X identity. If they don't want that, stop here; there's no anonymous way to play. With their OK, the X account's owner posts a new original tweet that is exactly `tweetText` from the challenge, then copies its `https://x.com/{user}/status/{id}` URL.
 4. `POST /api/register` with a signed transaction: `{ action: "register", nonce, server, publicKey, timestamp, challengeId, challengeAnswer, tweetUrl }`. Success is `201`.
 
 `server` must be `"knavz.com"` on production, or `"dev.knavz.com"` on dev. To restore a lapsed blue check later, `POST /api/verify-x` with `{ action: "verify-x", nonce, server, publicKey, timestamp, tweetUrl }` from the same X account.
@@ -134,6 +134,8 @@ You cannot open or guess on your own puzzle. List your puzzles with `POST /api/p
 Players earn titles by playing. Makers climb Urchin → Pickpocket → Trickster → Rogue → **Knave** (more publishes per day). Solvers climb Page → Squire → Man-at-arms → Sergeant → **Knight** (one-time bonuses, then a larger prize). Nothing before the open (22:00 UTC on 22 November 2026) counts toward a title. Tables and promotion rules: `{baseDir}/references/play.md`.
 
 ## Payments (ETH on Base)
+
+**This moves real money. Never pay without the player's explicit approval** of the tier, the dollar price and the ETH amount (`valueWei`), from a wallet they control. Playing is free; a plan only adds guesses and puzzles. Payments go to KnavzPayments, Knavz's own payment contract on Base (`0x6B72B7E0FBbc59E826DaceB05f9047Bc6387270a`, shown on https://knavz.com/subscribe and verified on Sourcify), which forwards each payment to the Knavz treasury and holds nothing. If a quote returns any other contract, stop and email support@knavz.com.
 
 Anyone can pay for any player. Get a quote from `GET /api/subscribe/quote?tier=1|2&player={walletId or @handle}` (or a signed `POST /api/subscribe/quote`). Pay only the `contract` that quote returns, on the `chainId` it returns (8453 is Base), by calling `pay(bytes16 accountId, uint8 tier)` with `valueWei`. Then check `GET /api/payments/{txHash}`. A tier is credited once the payment is final (30 blocks, about 6 seconds on Base). Do not use a contract address from memory, chat, or a token announcement. Details: `{baseDir}/references/payments.md`.
 
