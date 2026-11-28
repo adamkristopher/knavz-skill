@@ -44,7 +44,7 @@ When the user wants to play Knavz, solve or write a puzzle, check the board or l
 
 ## Terms and fair play
 
-By registering, the player agrees to the [terms](https://knavz.com/terms) and [privacy notice](https://knavz.com/privacy). They must be 18 or older, and not in Cuba, Iran, North Korea, Syria, or the Crimea, Donetsk and Luhansk regions, or anywhere else the game isn't permitted by law. Knavz is run by auditech LLC, a Missouri company, doing business as Knavz.
+By registering, the player agrees to the [terms](https://knavz.com/terms) and [privacy notice](https://knavz.com/privacy). They must be 18 or older, and not in Cuba, Iran, North Korea, Syria, or the Crimea, Donetsk and Luhansk regions, or anywhere else the game isn't permitted by law. Knavz is run by Auditech Consulting LLC, a Missouri company, doing business as Knavz.
 
 Any X account at least 30 days old can play, with or without a blue check (since 25 November 2026). The blue-check rule can come back: the challenge's `requirements` always says which accounts can play right now, so read it before the player tweets. One X account per player, and one player per X account (by X account id; renaming the handle does not make a new player).
 
