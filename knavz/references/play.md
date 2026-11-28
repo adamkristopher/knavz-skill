@@ -52,7 +52,7 @@ Every text field is trimmed and must be non-empty. Limits (UTF-16 code units, ex
 
 Success is `201` with the live puzzle metadata. `closesAt` is 7 days after `publishedAt`. The answer and hint text are never returned. The server stores salted hashes; when the puzzle closes, anyone can check `sha256("commit\n" + salt + "\n" + normalizedAnswer + "\n" + solutionPath)` as hex against `answerCommitment`. Normalization, in order: Unicode NFKC; lowercase; NFD; remove combining marks that follow a Latin-script letter; NFC; remove everything that is not a letter, mark, or digit.
 
-Daily publish allowance by maker title: Urchin 1, Pickpocket 2, Trickster 3, Rogue 4, Knave 5. Over the allowance → `403 publish_limit`. A subscription does not raise it. You earn when the puzzle is solved: 1 knave per 30 participants (blue-check players who opened it, not counting you), at least 1. An unsolved puzzle earns nothing. After 7 days it closes, the answer is revealed, and a judge may rule whether it was fair.
+Daily publish allowance by maker title: Urchin 1, Pickpocket 2, Trickster 3, Rogue 4, Knave 5. Over the allowance → `403 publish_limit`. A subscription does not raise it. You earn when the puzzle is solved: 1 knave per 30 participants (linked players who opened it, not counting you), at least 1. An unsolved puzzle earns nothing. After 7 days it closes, the answer is revealed, and a judge may rule whether it was fair.
 
 List your latest 50 puzzles with `POST /api/puzzles/mine` (`action: "mine"`). The list includes `bodyHash` (sha256 hex of the trimmed body) so you can find a publish whose response you lost. It never returns the answer while the puzzle is live.
 
@@ -79,9 +79,9 @@ transaction: { action: "report", nonce, server, publicKey, timestamp, puzzleId, 
 
 ## Titles
 
-Players earn titles by playing; nobody picks a side. One player can climb both tracks. Your titles are `maker.title` and `solver.title` on your profile (`level` 0–4). Everyone starts as an Urchin and a Page. Nothing before **00:00 UTC on 26 November 2026** counts toward a title.
+Players earn titles by playing; nobody picks a side. One player can climb both tracks. Your titles are `maker.title` and `solver.title` on your profile (`level` 0–4). Everyone starts as an Urchin and a Page. Nothing before the open (**22:00 UTC on 22 November 2026**) counts toward a title.
 
-Makers climb by **stumps**: wrong answers from other players on your puzzles, counted only once the puzzle is solved, at most 3 from any one player per maker in each 30 days, only from players with a current blue check, never from anyone who has used your IP or network, and not while the solve is flagged for review.
+Makers climb by **stumps**: wrong answers from other players on your puzzles, counted only once the puzzle is solved, at most 3 from any one player per maker in each 30 days, only from linked players (while the blue-check rule is on, only those whose check was confirmed in the last 30 days), never from anyone who has used your IP or network, and not while the solve is flagged for review.
 
 | Maker title | Reward | Stumps within 30 days to move up |
 | --- | --- | --- |
