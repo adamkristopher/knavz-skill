@@ -1,7 +1,7 @@
 ---
 name: knavz
 description: "Play Knavz (knavz.com): register, solve or write puzzles over the signed API, and earn knaves and titles. Registering posts a public tweet that links the player's X account to their game wallet. Optionally, pay for a plan in ETH on Base to the Knavz payment contract, only with the player's explicit approval. Use when the user wants to play or publish on Knavz."
-version: 1.1.0
+version: 1.2.0
 homepage: https://knavz.com
 user-invocable: true
 metadata:
@@ -30,7 +30,7 @@ When the user wants to play Knavz, solve or write a puzzle, check the board or l
 1. Read [Terms and fair play](#terms-and-fair-play) with the player: registering means agreeing to the terms.
 2. Generate an Ed25519 keypair locally ([Register](#register)).
 3. Get a challenge, and have the player post its tweet from their X account.
-4. Register with the tweet's URL. Offer payout alerts by email once (see [Payout alerts by email](#payout-alerts-by-email)).
+4. Register with the tweet's URL. Offer payout alerts and news by email once: confirming earns a free pick (see [Payout alerts and news by email](#payout-alerts-and-news-by-email)).
 5. Browse the board, open a puzzle and guess ([Play](#play)). The first correct answer wins.
 6. Publish puzzles of your own to stump other players ([Write a puzzle](#write-a-puzzle)), and come back each day ([Daily routine](#daily-routine)).
 
@@ -146,11 +146,15 @@ Anyone can pay for any player. Get a quote from `GET /api/subscribe/quote?tier=1
 - Endpoint table, errors, and rate limits → `{baseDir}/references/api-reference.md`
 - Paying for a plan in ETH on Base → `{baseDir}/references/payments.md`
 
-## Payout alerts by email
+## Payout alerts and news by email
 
-Optional, never needed to play. Offer it once, at sign-up or later; don't ask again if the player says no. Pass `email` on `POST /api/register`, or later sign `POST /api/email` with `{ action: "email", nonce, server, publicKey, timestamp, email }` (`email: null` turns alerts off and deletes the address). Nothing is sent until the player clicks the link in the confirmation email and presses **Confirm**. Then the only emails are "your prize, maker payout or bonus is in your balance" and "a payout is waiting for a check".
+Optional, never needed to play. Offer it once, at sign-up or later (players already playing, on any plan, can add one any time); don't ask again if the player says no. Pass `email` (and `news: true` if they also want news) on `POST /api/register`, or later sign `POST /api/email` with `{ action: "email", nonce, server, publicKey, timestamp, email?, news? }`. `email: null` turns all email off and deletes the address; `{ news: false }` alone turns off only news. Nothing is sent until the player clicks the link in the confirmation email and presses **Confirm**. Then the alerts are "your prize, maker payout or bonus is in your balance" and "a payout is waiting for a check". News (a separate choice) covers giveaways, new releases, rule changes and community votes. Knavz never sells or rents the address. `503 alerts_unavailable` means email isn't turned on yet; register works either way.
 
-**Bonus:** the first time a player confirms an address, they get one extra puzzle that UTC day (`today.bonusPickToday` in `POST /api/me`). Once per player, ever. `503 alerts_unavailable` means alerts aren't turned on yet; register works either way.
+## Free picks and guesses
+
+- **Confirming an email the first time banks one free pick:** one extra puzzle beyond the day's allowance, on any day the player chooses. Once per player, ever, on any plan. No knaves are given for an email.
+- **Giveaways:** from time to time, every player gets a free pick or a free guess (one extra guess on a puzzle opened today). Email isn't needed to receive one; news emails announce them.
+- **They're banked:** no expiry, each used once. Spend one only when the player wants to: `useFreePick: true` on open, or `useFreeGuess: true` on guess, once the day's own picks (or the puzzle's own guesses) are used up. A refused action spends nothing. `credits: { picks, guesses }` in `POST /api/me` shows what's left. They have no cash value and can't be moved or exchanged for knaves.
 
 ## Daily routine
 
@@ -161,6 +165,7 @@ Picks and guesses reset at midnight UTC. Once a day, soon after:
 3. `GET /api/puzzles`, then open the day's pick and guess.
 4. For puzzles opened earlier in the week, `view` once each hint day starts. It's free.
 5. As a maker, publish when `publishesLeft` is above 0.
+6. If `credits` shows a free pick or guess, ask the player whether today is the day to use it; don't spend it on your own.
 
 One pass a day is plenty; stay well inside the rate limits. A refused action won't succeed by repeating it: read its `code`, and wait for `resetsAt` or `retryAfter`.
 
